@@ -1,0 +1,109 @@
+
+
+
+<div class="contbox">
+         <!--<from class="fromsub">-->
+                 <!--<lanel>姓名</lanel><input type="text" id="firstanme" >-->
+                 <!--<label for="">年龄</label> <input type="text" id="age" >-->
+                 <!--<label for="">电话</label><input type="text" id="phone" >-->
+                 <!--<button id="addbtn">提交</button>-->
+         <!--</from>-->
+   <ul>
+            <li class="index_table">
+                <table cellpadding="0"  cellspacing="0">
+                        <tr>
+                                <th>序号</th>
+                                <th>姓名</th>
+                                <th>年龄</th>
+                                <th>操作</th>
+                        </tr>
+
+                    <% for (var i=0;i<user.length;i++){%>
+                        <tr>
+                                <td><%=user[i].id%></td>
+                                <td><%= user[i].lastname%></td>
+                                <td><%= user[i].age%></td>
+                                <td class="atd"><a href="javacript:;" onclick="del(<%=user[i].id%>)">删除</a><a href="javascript:;" onclick="edit(<%=user[i].id%>)">修改</a></td>
+                        </tr>
+                    <%}%>
+
+                </table>
+            </li>
+   </ul>
+
+
+</div>
+
+<script  src="/javascripts/jquery-1.10.1.min.js"></script>
+<script>
+
+               function del(id) {
+                   $.ajax({
+                       type:'post',
+                       url:'users/del',
+                       data:{userId:id},
+                       datatype:'json',
+                       success:function(data){
+                           console.log(data);
+                             if(data){
+                                   window.location.reload(true);
+                             }
+                       }
+                   })
+               }
+               function  edit(id) {
+                     $.ajax({
+                         type:'post',
+                         url:'',
+                         data:{},
+                         datatype:'json',
+                         success:function(data){
+
+                         }
+                     })
+               }
+
+</script>
+<style>
+        *{
+                padding:0px;
+                margin:0px;
+        }
+
+        .contbox{
+                width:800px;
+                height:500px;
+                margin:50px auto;
+                border:1px solid #ccc;
+        }
+        li{
+                list-style:none;
+        }
+        .index_table table {
+                border-right: 1px solid #98B9D7;
+                border-bottom: 1px solid #98B9D7;
+                width:100%;
+        }
+        .index_table table td,th {
+                border-left: 1px solid #98B9D7;
+                border-top: 1px solid #98B9D7;
+                height:40px;
+                text-align:center;
+        }
+        .fromsub input{
+                 margin-bottom:30px;
+                 height:40px;
+        }
+        .fromsub button{
+                border:none;
+                background:#00B7FF;
+                color:#fff;
+                cursor:pointer;
+                padding:10px 15px;
+                font-size:16px;
+                border-radius:6px;
+        }
+        .atd a{margin-right:15px;}
+
+
+</style>
