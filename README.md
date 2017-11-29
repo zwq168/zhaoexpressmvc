@@ -28,6 +28,7 @@ demo是user.ejs 模板
 修改数据接口   ：users/edit   post方式
 
 
-
+返回数据格式 :
+{"code":"200","message":"成功","result":{"__v":0,"name":"zhangsan","age":12,"_id":"5a1e66e7ee17b806cc13dda7"}}
 
 在user.ejs 页面去操作 
