@@ -2,12 +2,12 @@
 
 
 <div class="contbox">
-         <!--<from class="fromsub">-->
-                 <!--<lanel>姓名</lanel><input type="text" id="firstanme" >-->
-                 <!--<label for="">年龄</label> <input type="text" id="age" >-->
-                 <!--<label for="">电话</label><input type="text" id="phone" >-->
-                 <!--<button id="addbtn">提交</button>-->
-         <!--</from>-->
+         <from class="fromsub">
+                 <lanel>姓名</lanel><input type="text" id="username" >
+                 <label >年龄</label> <input type="text" id="age" >
+                 <button id="addbtn">提交</button>
+                 <button id="editbtn" >修改</button>
+         </from>
    <ul>
             <li class="index_table">
                 <table cellpadding="0"  cellspacing="0">
@@ -20,10 +20,12 @@
 
                     <% for (var i=0;i<user.length;i++){%>
                         <tr>
-                                <td><%=user[i].id%></td>
-                                <td><%= user[i].lastname%></td>
-                                <td><%= user[i].age%></td>
-                                <td class="atd"><a href="javacript:;" onclick="del(<%=user[i].id%>)">删除</a><a href="javascript:;" onclick="edit(<%=user[i].id%>)">修改</a></td>
+                                <td><%=user[i]._id%></td>
+                                <td class="uname"><%= user[i].name%></td>
+                                <td class="uage"><%= user[i].age%></td>
+                                <td class="atd"><a href="javascript:;" onclick="del('<%=user[i]._id%>')" >删除</a>
+                                    <a href="javascript:;" onclick="edit('<%=user[i]._id%>','<%=user[i].name%>','<%=user[i].age%>')">修改</a>
+                                </td>
                         </tr>
                     <%}%>
 
@@ -37,6 +39,63 @@
 <script  src="/javascripts/jquery-1.10.1.min.js"></script>
 <script>
 
+         $(function () {
+             $("#addbtn").on("click",function () {
+                  var username=$("#username").val();
+                  var age=$("#age").val();
+
+                  if(username==""){
+                      alert("用户名输入不能为空") ;return;
+                  }
+                  if(age==""){
+                      alert("年龄不能为空"); return;
+                  }
+                  $.ajax({
+                      type:'post',
+                      url:'/users/add',
+                      data:{name:username,age:age},
+                      success:function(data){
+                          console.log(data);
+                          if(data.code=="200"){
+                              window.location.reload(true);
+                          }else{
+                              alert("添加失败");
+                          }
+                      }
+                  })
+             })
+//修改
+             $("#editbtn").on("click",function(){
+                 var username=$("#username").val();
+                 var age=$("#age").val();
+                 var userid=$(this).attr("aid");
+                 if(username==""){
+                     alert("用户名输入不能为空") ;return;
+                 }
+                 if(age==""){
+                     alert("年龄不能为空"); return;
+                 }
+//                 console.log(username+'--'+age+'--'+userid); return;
+                 $.ajax({
+                         type:'post',
+                         url:'/users/edit',
+                         data:{userid:userid,name:username,age:age},
+                         datatype:'json',
+                         success:function(data){
+                                  if(data.code=="200"){
+                                      window.location.reload(true);
+                                  }else{
+                                       alert("修改失败");
+                                  }
+                         },error:function(err){
+                            alert("请求失败");
+                           }
+                     })
+
+             })
+         })
+    
+    
                function del(id) {
                    $.ajax({
                        type:'post',
@@ -45,23 +104,26 @@
                        datatype:'json',
                        success:function(data){
                            console.log(data);
-                             if(data){
+                             if(data.code=="200"){
                                    window.location.reload(true);
                              }
                        }
                    })
                }
-               function  edit(id) {
-                     $.ajax({
-                         type:'post',
-                         url:'',
-                         data:{},
-                         datatype:'json',
-                         success:function(data){
+               function  edit(id,name,age) {
+                    $("#editbtn").show();
+                    $("#addbtn").hide();
 
-                         }
-                     })
+                    $("#editbtn").attr("aid",id);
+
+                    $("#username").val(name);
+                    $("#age").val(age);
+
+//             alert(id);
+
                }
+
+
 
 </script>
 <style>
@@ -69,7 +131,7 @@
                 padding:0px;
                 margin:0px;
         }
-
+        #editbtn{display:none}
         .contbox{
                 width:800px;
                 height:500px;
